@@ -1,8 +1,9 @@
 import React from 'react'
 import './App.css'
+import GameOfLife from './components/GameOfLife'
 
 const App = () => {
-  return 'kissa'
+    return <GameOfLife />
 }
 
 export default App
