@@ -1,8 +1,16 @@
 {
-  "presets": [
-    "react-app"
-  ],
-  "plugins": [
-    "transform-class-properties"
-  ]
+    "presets": [
+        [
+            "@babel/env",
+            {
+                "targets": {
+                    "browsers": ["Chrome >=59"]
+                },
+                "modules": false,
+                "loose": true
+            }
+        ],
+        "@babel/react"
+    ],
+    "plugins": ["@babel/plugin-transform-arrow-functions"]
 }
