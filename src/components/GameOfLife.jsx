@@ -15,16 +15,22 @@ const gridNeighbourOperations = [
     [-1, 1],
 ]
 
+const generateGrid = (randomizer = 0) => {
+    const grid = []
+    for (let ii = 0; ii < GRID_HEIGHT; ii++) {
+        grid[ii] = Array.from(Array(GRID_WIDTH), () =>
+            !!randomizer && Math.random() > randomizer ? 1 : 0
+        )
+    }
+    return grid
+}
+
 const GameOfLife = () => {
     const [running, setRunning] = useState(false)
+    const [randomizer, setRandomizer] = useState(0.5)
+    const [grid, setGrid] = useState(() => generateGrid())
+
     const runningRef = useRef(null)
-    const [grid, setGrid] = useState(() => {
-        const grid = []
-        for (let ii = 0; ii < GRID_HEIGHT; ii++) {
-            grid[ii] = Array.from(Array(GRID_WIDTH), () => 0)
-        }
-        return grid
-    })
 
     const runSimulation = useCallback(() => {
         if (!runningRef.current) return
@@ -66,7 +72,7 @@ const GameOfLife = () => {
     }, [])
 
     return (
-        <Fragment>
+        <>
             <button
                 onClick={() => {
                     setRunning(!running)
@@ -76,6 +82,29 @@ const GameOfLife = () => {
             >
                 {running ? 'stop' : 'start'}
             </button>
+            <button
+                onClick={() => {
+                    setGrid(generateGrid())
+                }}
+            >
+                clear
+            </button>
+            <button
+                onClick={() => {
+                    setGrid(generateGrid(randomizer))
+                }}
+            >
+                randomize
+            </button>
+            <input
+                type="range"
+                min="1"
+                max="100"
+                defaultValue={randomizer * 100}
+                onChange={e => {
+                    setRandomizer(~~e.target.value / 100)
+                }}
+            />
             <div
                 style={{
                     display: 'grid',
@@ -108,7 +137,7 @@ const GameOfLife = () => {
                     })
                 )}
             </div>
-        </Fragment>
+        </>
     )
 }
 
