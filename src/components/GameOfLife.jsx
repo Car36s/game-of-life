@@ -30,17 +30,18 @@ const GameOfLife = () => {
     const [randomizer, setRandomizer] = useState(0.5)
     const [grid, setGrid] = useState(() => generateGrid())
 
-    const runningRef = useRef(null)
+    const runningRef = useRef(running)
+    runningRef.current = running
 
     const runSimulation = useCallback(() => {
         if (!runningRef.current) return
 
-        setGrid(g => {
-            return produce(g, gridCopy => {
+        setGrid(g =>
+            produce(g, gridCopy => {
                 for (let ii = 0; ii < GRID_WIDTH; ii++) {
                     for (let jj = 0; jj < GRID_HEIGHT; jj++) {
                         let neighbours = 0
-                        gridNeighbourOperations.map(([deltaX, deltaY]) => {
+                        gridNeighbourOperations.forEach(([deltaX, deltaY]) => {
                             const neighbourX = ii + deltaX
                             const neighbourY = jj + deltaY
 
@@ -60,50 +61,56 @@ const GameOfLife = () => {
                             gridCopy[ii][jj] = 0
                         }
 
-                        if (g[ii][jj] === 0 && neighbours === 3) {
+                        if (neighbours === 3 && !g[ii][jj]) {
                             gridCopy[ii][jj] = 1
                         }
                     }
                 }
             })
-        })
+        )
 
-        setTimeout(() => runSimulation(), 100)
+        setTimeout(() => runSimulation(), 16)
+    }, [])
+
+    const generateEmptyGrid = useCallback(() => {
+        setGrid(generateGrid())
+    }, [])
+
+    const generateRandomGrid = useCallback(() => {
+        setGrid(generateGrid(randomizer))
+    }, [randomizer])
+    const onSetRandomizer = useCallback(event => {
+        setRandomizer(~~event.target.value / 100)
+    }, [])
+
+    const onStartSimulation = useCallback(() => {
+        setRunning(!running)
+        runningRef.current = !running
+        runSimulation()
+    }, [running])
+
+    const onClickCell = useCallback(event => {
+        const { x, y } = event.target.dataset
+        setGrid(g =>
+            produce(g, gridCopy => {
+                gridCopy[x][y] = ~~!g[x][y]
+            })
+        )
     }, [])
 
     return (
         <>
-            <button
-                onClick={() => {
-                    setRunning(!running)
-                    runningRef.current = !running
-                    runSimulation()
-                }}
-            >
+            <button onClick={onStartSimulation}>
                 {running ? 'stop' : 'start'}
             </button>
-            <button
-                onClick={() => {
-                    setGrid(generateGrid())
-                }}
-            >
-                clear
-            </button>
-            <button
-                onClick={() => {
-                    setGrid(generateGrid(randomizer))
-                }}
-            >
-                randomize
-            </button>
+            <button onClick={generateEmptyGrid}>clear</button>
+            <button onClick={generateRandomGrid}>randomize</button>
             <input
                 type="range"
                 min="1"
                 max="100"
                 defaultValue={randomizer * 100}
-                onChange={e => {
-                    setRandomizer(~~e.target.value / 100)
-                }}
+                onChange={onSetRandomizer}
             />
             <div
                 style={{
@@ -111,30 +118,23 @@ const GameOfLife = () => {
                     gridTemplateColumns: `repeat(${GRID_WIDTH}, 20px)`,
                 }}
             >
-                {grid.map((row, xIndex) =>
-                    row.map((column, yIndex) => {
-                        return (
-                            <div
-                                style={{
-                                    width: `20px`,
-                                    height: `20px`,
-                                    border: `thin solid #000`,
-                                    backgroundColor: `${
-                                        column === 0 ? 'white' : 'black'
-                                    }`,
-                                }}
-                                key={`${yIndex}-${xIndex}`}
-                                onClick={() => {
-                                    const newGrid = produce(grid, gridCopy => {
-                                        gridCopy[xIndex][yIndex] = ~~!grid[
-                                            xIndex
-                                        ][yIndex]
-                                    })
-                                    setGrid(newGrid)
-                                }}
-                            />
-                        )
-                    })
+                {grid.map((row, x) =>
+                    row.map((cell, y) => (
+                        <div
+                            style={{
+                                width: `20px`,
+                                height: `20px`,
+                                border: `thin solid #000`,
+                                backgroundColor: `${
+                                    cell === 0 ? 'white' : 'black'
+                                }`,
+                            }}
+                            data-x={x}
+                            data-y={y}
+                            key={`${x}-${y}`}
+                            onClick={onClickCell}
+                        />
+                    ))
                 )}
             </div>
         </>
