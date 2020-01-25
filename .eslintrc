@@ -32,21 +32,13 @@
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "prettier/prettier": "error",
-        "react/jsx-max-props-per-line": [
-            1,
-            { "maximum": 10, "when": "multiline" }
-        ],
+        "react/jsx-max-props-per-line": [1, { "maximum": 10, "when": "multiline" }],
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "react/jsx-no-literals": [
-            0,
-            { "noStrings": false, "allowedStrings": ["allowed"] }
-        ],
+        "react/jsx-no-literals": [0, { "noStrings": false, "allowedStrings": ["allowed"] }],
         "react/no-array-index-key": [0],
         "no-undef": ["error", { "typeof": true }],
-        "no-unused-vars": [
-            "error",
-            { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
-        ]
+        "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+        "react/jsx-one-expression-per-line": [1, { "allow": "single-child" }]
     },
     "extends": ["plugin:prettier/recommended", "plugin:react/all"],
     "plugins": ["react", "react-hooks", "prettier"],

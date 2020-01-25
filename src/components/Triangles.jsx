@@ -1,5 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import Sketch from 'react-p5'
+
+const magicStep = [Math.PI / 36, 87 / 100]
+
 const getTriangleCoordinates = (xOffset, yOffset, length, angle) => [
     xOffset + length * Math.cos(angle),
     yOffset + length * Math.sin(angle),
@@ -9,11 +12,11 @@ const getTriangleCoordinates = (xOffset, yOffset, length, angle) => [
     yOffset + length * Math.sin((4 / 3) * Math.PI + angle),
 ]
 
-const nestTriangles = (xOffset, yOffset, length, angle, depth) => {
+const nestTriangles = (xOffset, yOffset, length, angle, depth, step) => {
+    angle = (angle * Math.PI) / 180
     const triangles = [getTriangleCoordinates(xOffset, yOffset, length, angle)]
 
-    const angleIncrement = Math.PI / 36
-    const lenghtIncrement = 0.87
+    const [angleIncrement, lenghtIncrement] = magicStep
 
     const doNesting = (_length, _angle, nextDepth) => {
         if (nextDepth < 0) return triangles
@@ -32,12 +35,13 @@ const Triangles = () => {
     const [length, setLength] = useState(300)
     const [angle, setAngle] = useState(30)
     const [depth, setDepth] = useState(25)
+    const [step, setStep] = useState(magicStep)
 
-    const [triangles, setTriangles] = useState(nestTriangles(400, 400, length, angle, depth))
+    const [triangles, setTriangles] = useState(nestTriangles(400, 400, length, angle, depth, step))
 
     useEffect(() => {
-        setTriangles(nestTriangles(400, 400, length, angle, depth))
-    }, [length, angle, depth])
+        setTriangles(nestTriangles(400, 400, length, angle, depth, step))
+    }, [length, angle, depth, step])
 
     const setup = useCallback((p5, canvasParentRef) => {
         p5.createCanvas(1000, 1000).parent(canvasParentRef)
@@ -46,7 +50,6 @@ const Triangles = () => {
     const draw = useCallback(
         p5 => {
             const { mouseX, mouseY } = p5
-
             p5.background(0)
             p5.noFill()
             p5.ellipse(mouseX, mouseY, 20, 20)
@@ -60,20 +63,57 @@ const Triangles = () => {
         setAngle(~~value)
     }, [])
     const onSetDepth = useCallback(({ target: { value } }) => setDepth(~~value), [])
+    const onSetStep = useCallback(({ target: { value } }) => {
+        setStep(~~value)
+    }, [])
+
     return (
         <>
             <Sketch draw={draw} setup={setup} />
+
+            <label htmlFor="length-slider">Size</label>
             <input
                 className="slider"
-                id="lenght"
+                id="length-slider"
                 max="600"
                 min="10"
                 onChange={onSetLength}
                 type="range"
                 value={length}
             />
-            <input className="slider" id="angle" max="360" min="0" onChange={onSetAngle} type="range" value={angle} />
-            <input className="slider" id="depth" max="50" min="0" onChange={onSetDepth} type="range" value={depth} />
+
+            <label htmlFor="angle-slider">Angle</label>
+            <input
+                className="slider"
+                id="angle-slider"
+                max="360"
+                min="0"
+                onChange={onSetAngle}
+                type="range"
+                value={angle}
+            />
+
+            <label htmlFor="depth-slider">Depth</label>
+            <input
+                className="slider"
+                id="depth-slider"
+                max="30"
+                min="0"
+                onChange={onSetDepth}
+                type="range"
+                value={depth}
+            />
+
+            <label htmlFor="step-slider">Step</label>
+            <input
+                className="slider"
+                id="step-slider"
+                max="100"
+                min="0"
+                onChange={onSetStep}
+                type="range"
+                value={step}
+            />
         </>
     )
 }
