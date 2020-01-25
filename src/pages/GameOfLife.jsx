@@ -18,9 +18,7 @@ const gridNeighbourOperations = [
 const generateGrid = (randomizer = 0) => {
     const grid = []
     for (let ii = 0; ii < GRID_HEIGHT; ii++) {
-        grid[ii] = Array.from(Array(GRID_WIDTH), () =>
-            !!randomizer && Math.random() > randomizer ? 1 : 0
-        )
+        grid[ii] = Array.from(Array(GRID_WIDTH), () => (!!randomizer && Math.random() > randomizer ? 1 : 0))
     }
     return grid
 }
@@ -109,13 +107,7 @@ const GameOfLife = () => {
             <button onClick={generateRandomGrid} type="button">
                 randomize
             </button>
-            <input
-                defaultValue={randomizer * 100}
-                max="100"
-                min="1"
-                onChange={onSetRandomizer}
-                type="range"
-            />
+            <input defaultValue={randomizer * 100} max="100" min="1" onChange={onSetRandomizer} type="range" />
             <div
                 style={{
                     display: 'grid',
@@ -133,9 +125,7 @@ const GameOfLife = () => {
                                 width: `20px`,
                                 height: `20px`,
                                 border: `thin solid #000`,
-                                backgroundColor: `${
-                                    cell === 0 ? 'white' : 'black'
-                                }`,
+                                backgroundColor: `${cell === 0 ? 'white' : 'black'}`,
                             }}
                         />
                     ))

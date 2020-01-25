@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
-import GameOfLife from './components/GameOfLife'
-import Triangles from './components/Triangles'
+import GameOfLife from './pages/GameOfLife'
+import Triangles from './pages/Triangles'
 
 const App = () => {
     // return <GameOfLife />
