@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, Fragment } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import { produce } from 'immer'
 
 const GRID_WIDTH = 50
@@ -87,7 +87,7 @@ const GameOfLife = () => {
         setRunning(!running)
         runningRef.current = !running
         runSimulation()
-    }, [running])
+    }, [runSimulation, running])
 
     const onClickCell = useCallback(event => {
         const { x, y } = event.target.dataset
@@ -100,17 +100,21 @@ const GameOfLife = () => {
 
     return (
         <>
-            <button onClick={onStartSimulation}>
+            <button onClick={onStartSimulation} type="button">
                 {running ? 'stop' : 'start'}
             </button>
-            <button onClick={generateEmptyGrid}>clear</button>
-            <button onClick={generateRandomGrid}>randomize</button>
+            <button onClick={generateEmptyGrid} type="button">
+                clear
+            </button>
+            <button onClick={generateRandomGrid} type="button">
+                randomize
+            </button>
             <input
-                type="range"
-                min="1"
-                max="100"
                 defaultValue={randomizer * 100}
+                max="100"
+                min="1"
                 onChange={onSetRandomizer}
+                type="range"
             />
             <div
                 style={{
@@ -121,6 +125,10 @@ const GameOfLife = () => {
                 {grid.map((row, x) =>
                     row.map((cell, y) => (
                         <div
+                            data-x={x}
+                            data-y={y}
+                            key={`${x}-${y}`}
+                            onClick={onClickCell}
                             style={{
                                 width: `20px`,
                                 height: `20px`,
@@ -129,10 +137,6 @@ const GameOfLife = () => {
                                     cell === 0 ? 'white' : 'black'
                                 }`,
                             }}
-                            data-x={x}
-                            data-y={y}
-                            key={`${x}-${y}`}
-                            onClick={onClickCell}
                         />
                     ))
                 )}
