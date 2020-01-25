@@ -1,9 +1,14 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "jsx": "react",
-    "allowSyntheticDefaultImports": true
-  },
-  "exclude": ["node_modules", "public", ".cache"]
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true
+    },
+    "javascript.suggest.autoImports": true,
+    "javascript.suggestionActions.enabled": true,
+    "exclude": ["node_modules", "public", ".cache"],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    }
 }
