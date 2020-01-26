@@ -1,21 +1,30 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import Sketch from 'react-p5'
-import { nestTriangles, magicStep } from '../lib/triangles'
+import { nestTriangles, triangleOnOffset } from '../lib/triangles'
+const screenSize = 1000
 
 const Triangles = () => {
     const [length, setLength] = useState(300)
     const [angle, setAngle] = useState(30)
     const [depth, setDepth] = useState(25)
-    const [step, setStep] = useState(magicStep)
+    const [step, setStep] = useState(1)
+    const [grid, setGrid] = useState([[500, 500]])
 
-    const [triangles, setTriangles] = useState(nestTriangles(400, 400, length, angle, depth, step))
+    const [triangles, setTriangles] = useState(nestTriangles(length, angle, depth))
 
+    useEffect(() => setTriangles(nestTriangles(length, angle, depth)), [length, angle, depth])
+    /*
     useEffect(() => {
-        setTriangles(nestTriangles(400, 400, length, angle, depth, step))
-    }, [length, angle, depth, step])
-
+        for (let jj = 0; jj <= screenSize; jj + length) {
+            for (let ii = 0; ii <= screenSize; ii + length) {
+                const x = (length * ii) / 2
+                const y = jj % 2 ? 
+            }
+        }
+    }, [])
+*/
     const setup = useCallback((p5, canvasParentRef) => {
-        p5.createCanvas(1000, 1000).parent(canvasParentRef)
+        p5.createCanvas(screenSize, screenSize).parent(canvasParentRef)
     }, [])
 
     const draw = useCallback(
@@ -25,9 +34,9 @@ const Triangles = () => {
             p5.noFill()
             p5.ellipse(mouseX, mouseY, 20, 20)
             p5.stroke(0, 255, 0)
-            triangles.map(triangle => p5.triangle(...triangle))
+            grid.forEach(offset => triangles.forEach(triangle => p5.triangle(...triangleOnOffset(offset, triangle))))
         },
-        [triangles]
+        [grid, triangles]
     )
     const onSetLength = useCallback(({ target: { value } }) => setLength(~~value), [])
     const onSetAngle = useCallback(({ target: { value } }) => {
@@ -42,7 +51,7 @@ const Triangles = () => {
         <>
             <Sketch draw={draw} setup={setup} />
 
-            <label htmlFor="length-slider">Size</label>
+            <label htmlFor="length-slider">Size ({length})</label>
             <input
                 className="slider"
                 id="length-slider"
@@ -53,7 +62,7 @@ const Triangles = () => {
                 value={length}
             />
 
-            <label htmlFor="angle-slider">Angle</label>
+            <label htmlFor="angle-slider">Angle ({angle})</label>
             <input
                 className="slider"
                 id="angle-slider"
@@ -64,7 +73,7 @@ const Triangles = () => {
                 value={angle}
             />
 
-            <label htmlFor="depth-slider">Depth</label>
+            <label htmlFor="depth-slider">Depth ({depth})</label>
             <input
                 className="slider"
                 id="depth-slider"
@@ -75,7 +84,7 @@ const Triangles = () => {
                 value={depth}
             />
 
-            <label htmlFor="step-slider">Step</label>
+            <label htmlFor="step-slider">Step ({step})</label>
             <input
                 className="slider"
                 id="step-slider"
