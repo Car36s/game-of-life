@@ -7,7 +7,7 @@ const getTriangle = (length, angle) => [
     length * Math.sin((4 / 3) * Math.PI + angle),
 ]
 
-export const magicStep = [Math.PI / 36, 87 / 100]
+export const magicStep = [Math.PI / 37, 87 / 100]
 
 export const nestTriangles = (length, angle, depth) => {
     angle = (angle * Math.PI) / 180
@@ -26,7 +26,7 @@ export const nestTriangles = (length, angle, depth) => {
     return doNesting(length * lenghtIncrement, angle + angleIncrement, depth - 1)
 }
 
-export const triangleOnOffset = ([xOffset, yOffset], [x1, y1, x2, y2, x3, y3]) => [
+export const triangleOnOffset = (xOffset, yOffset, [x1, y1, x2, y2, x3, y3]) => [
     x1 + xOffset,
     y1 + yOffset,
     x2 + xOffset,

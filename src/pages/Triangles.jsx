@@ -1,28 +1,40 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import Sketch from 'react-p5'
+import { produce } from 'immer'
 import { nestTriangles, triangleOnOffset } from '../lib/triangles'
-const screenSize = 1000
+const screenSize = 1500
+const gridLength = 6
 
 const Triangles = () => {
-    const [length, setLength] = useState(300)
-    const [angle, setAngle] = useState(30)
+    const [length, setLength] = useState(200)
+    const [angle, setAngle] = useState(0)
     const [depth, setDepth] = useState(25)
     const [step, setStep] = useState(1)
-    const [grid, setGrid] = useState([[500, 500]])
+    const [grid, setGrid] = useState([])
 
-    const [triangles, setTriangles] = useState(nestTriangles(length, angle, depth))
-
-    useEffect(() => setTriangles(nestTriangles(length, angle, depth)), [length, angle, depth])
-    /*
     useEffect(() => {
-        for (let jj = 0; jj <= screenSize; jj + length) {
-            for (let ii = 0; ii <= screenSize; ii + length) {
-                const x = (length * ii) / 2
-                const y = jj % 2 ? 
-            }
-        }
-    }, [])
-*/
+        const triangleSide = Math.cos(Math.PI / 6) * length * 2
+        const triangleHeight = Math.sin(Math.PI / 6) * length
+
+        console.log('side', length, triangleSide, triangleHeight)
+        setGrid(grid =>
+            produce(grid, gridCopy => {
+                let rowCounter = 0 // rows 0-1 => 0, 2-3 => 1, etc..
+                for (let jj = 0; jj < gridLength; jj++) {
+                    const yOffset = triangleHeight * (jj + 1) + 10 + rowCounter * triangleHeight
+
+                    for (let ii = 0; ii < gridLength; ii++) {
+                        const xOffset = triangleSide * ii + length + ((jj % 2) * triangleSide) / 2 - 300
+
+                        gridCopy[gridLength * jj + ii] = [xOffset, yOffset, 90 + jj * 180 + (rowCounter % 2) * angle]
+                    }
+
+                    rowCounter += jj % 2
+                }
+            })
+        )
+    }, [length, angle])
+    console.log(grid)
     const setup = useCallback((p5, canvasParentRef) => {
         p5.createCanvas(screenSize, screenSize).parent(canvasParentRef)
     }, [])
@@ -34,9 +46,13 @@ const Triangles = () => {
             p5.noFill()
             p5.ellipse(mouseX, mouseY, 20, 20)
             p5.stroke(0, 255, 0)
-            grid.forEach(offset => triangles.forEach(triangle => p5.triangle(...triangleOnOffset(offset, triangle))))
+            grid.forEach(([xOffset, yOffset, angle]) =>
+                nestTriangles(length, angle, depth).forEach(triangle =>
+                    p5.triangle(...triangleOnOffset(xOffset, yOffset, triangle))
+                )
+            )
         },
-        [grid, triangles]
+        [depth, grid, length]
     )
     const onSetLength = useCallback(({ target: { value } }) => setLength(~~value), [])
     const onSetAngle = useCallback(({ target: { value } }) => {
