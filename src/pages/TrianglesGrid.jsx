@@ -3,9 +3,10 @@ import Sketch from 'react-p5'
 import { produce } from 'immer'
 import { nestTriangles, triangleOnOffset } from '../lib/triangles'
 const screenSize = 1500
-const gridLength = 6
+const gridLength = 5
+const gridHeight = 10
 
-const Triangles = () => {
+const TrianglesGrid = () => {
     const [length, setLength] = useState(200)
     const [angle, setAngle] = useState(0)
     const [depth, setDepth] = useState(25)
@@ -16,11 +17,10 @@ const Triangles = () => {
         const triangleSide = Math.cos(Math.PI / 6) * length * 2
         const triangleHeight = Math.sin(Math.PI / 6) * length
 
-        console.log('side', length, triangleSide, triangleHeight)
         setGrid(grid =>
             produce(grid, gridCopy => {
                 let rowCounter = 0 // rows 0-1 => 0, 2-3 => 1, etc..
-                for (let jj = 0; jj < gridLength; jj++) {
+                for (let jj = 0; jj < gridHeight; jj++) {
                     const yOffset = triangleHeight * (jj + 1) + 10 + rowCounter * triangleHeight
 
                     for (let ii = 0; ii < gridLength; ii++) {
@@ -34,7 +34,7 @@ const Triangles = () => {
             })
         )
     }, [length, angle])
-    console.log(grid)
+
     const setup = useCallback((p5, canvasParentRef) => {
         p5.createCanvas(screenSize, screenSize).parent(canvasParentRef)
     }, [])
@@ -114,4 +114,4 @@ const Triangles = () => {
     )
 }
 
-export default Triangles
+export default TrianglesGrid

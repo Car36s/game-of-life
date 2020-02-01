@@ -1,11 +1,13 @@
 import React from 'react'
 import './App.css'
 import GameOfLife from './pages/GameOfLife'
-import Triangles from './pages/Triangles'
+import TrianglesGrid from './pages/TrianglesGrid'
+import TrianglesLeaf from './pages/TrianglesLeaf'
 
 const App = () => {
     // return <GameOfLife />
-    return <Triangles />
+    // return <TrianglesGrid />
+    return <TrianglesLeaf />
 }
 
 export default App

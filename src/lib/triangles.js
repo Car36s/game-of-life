@@ -7,11 +7,12 @@ const getTriangle = (length, angle) => [
     length * Math.sin((4 / 3) * Math.PI + angle),
 ]
 
-export const magicStep = [Math.PI / 37, 87 / 100]
+export const magicStep = [Math.PI / 57, 91 / 100]
 
 export const nestTriangles = (length, angle, depth) => {
     angle = (angle * Math.PI) / 180
-    const triangles = [getTriangle(length, angle)]
+    const triangles = []
+    // const triangles = [getTriangle(length, angle)]
 
     const [angleIncrement, lenghtIncrement] = magicStep
 
