@@ -32,7 +32,10 @@
     "rules": {
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
-        "react/function-component-definition": "arrow-function",
+        "react/function-component-definition": [1, {
+            "namedComponents": "arrow-function",
+            "unnamedComponents": "arrow-function"
+          }],
         "prettier/prettier": "error",
         "react/jsx-max-props-per-line": [1, { "maximum": 10, "when": "multiline" }],
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],

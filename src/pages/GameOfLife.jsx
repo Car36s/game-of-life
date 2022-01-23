@@ -34,8 +34,8 @@ const GameOfLife = () => {
     const runSimulation = useCallback(() => {
         if (!runningRef.current) return
 
-        setGrid(g =>
-            produce(g, gridCopy => {
+        setGrid((g) =>
+            produce(g, (gridCopy) => {
                 for (let ii = 0; ii < GRID_WIDTH; ii++) {
                     for (let jj = 0; jj < GRID_HEIGHT; jj++) {
                         let neighbours = 0
@@ -77,7 +77,7 @@ const GameOfLife = () => {
     const generateRandomGrid = useCallback(() => {
         setGrid(generateGrid(randomizer))
     }, [randomizer])
-    const onSetRandomizer = useCallback(event => {
+    const onSetRandomizer = useCallback((event) => {
         setRandomizer(~~event.target.value / 100)
     }, [])
 
@@ -87,10 +87,10 @@ const GameOfLife = () => {
         runSimulation()
     }, [runSimulation, running])
 
-    const onClickCell = useCallback(event => {
+    const onClickCell = useCallback((event) => {
         const { x, y } = event.target.dataset
-        setGrid(g =>
-            produce(g, gridCopy => {
+        setGrid((g) =>
+            produce(g, (gridCopy) => {
                 gridCopy[x][y] = ~~!g[x][y]
             })
         )
@@ -101,13 +101,17 @@ const GameOfLife = () => {
             <button onClick={onStartSimulation} type="button">
                 {running ? 'stop' : 'start'}
             </button>
+
             <button onClick={generateEmptyGrid} type="button">
                 clear
             </button>
+
             <button onClick={generateRandomGrid} type="button">
                 randomize
             </button>
+
             <input defaultValue={randomizer * 100} max="100" min="1" onChange={onSetRandomizer} type="range" />
+
             <div
                 style={{
                     display: 'grid',

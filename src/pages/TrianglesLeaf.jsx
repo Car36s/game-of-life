@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import Sketch from 'react-p5'
 import { nestTriangles, triangleOnOffset } from '../lib/triangles'
-const screenSize = 1500
+const screenSize = 1000
 
-const degToRad = deg => (deg * Math.PI) / 180
+const degToRad = (deg) => (deg * Math.PI) / 180
 
 const TrianglesLeaf = () => {
     const [length, setLength] = useState(200)
@@ -68,7 +68,7 @@ const TrianglesLeaf = () => {
     }, [])
 
     const draw = useCallback(
-        p5 => {
+        (p5) => {
             const { mouseX, mouseY } = p5
             p5.background(0)
             p5.noFill()
@@ -76,7 +76,7 @@ const TrianglesLeaf = () => {
             p5.stroke(0, 255, 0)
 
             grid.forEach(([xOffset, yOffset, angle]) =>
-                nestTriangles(length, angle, depth).forEach(triangle =>
+                nestTriangles(length, angle, depth).forEach((triangle) =>
                     p5.triangle(...triangleOnOffset(xOffset, yOffset, triangle))
                 )
             )
@@ -94,9 +94,8 @@ const TrianglesLeaf = () => {
 
     return (
         <>
-            <Sketch draw={draw} setup={setup} />
-
             <label htmlFor="length-slider">Size ({length})</label>
+
             <input
                 className="slider"
                 id="length-slider"
@@ -108,6 +107,7 @@ const TrianglesLeaf = () => {
             />
 
             <label htmlFor="angle-slider">Angle ({angle})</label>
+
             <input
                 className="slider"
                 id="angle-slider"
@@ -119,6 +119,7 @@ const TrianglesLeaf = () => {
             />
 
             <label htmlFor="depth-slider">Depth ({depth})</label>
+
             <input
                 className="slider"
                 id="depth-slider"
@@ -130,6 +131,7 @@ const TrianglesLeaf = () => {
             />
 
             <label htmlFor="gridRadius-slider">Radius ({gridRadius})</label>
+
             <input
                 className="slider"
                 id="gridRadius-slider"
@@ -139,6 +141,8 @@ const TrianglesLeaf = () => {
                 type="range"
                 value={gridRadius}
             />
+
+            <Sketch draw={draw} setup={setup} />
         </>
     )
 }

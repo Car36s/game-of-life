@@ -9,10 +9,13 @@ import TrianglesLeaf from './pages/TrianglesLeaf'
 const App = () => (
     <>
         <Navigator />
+
         <Routes>
-            <Route path="/" element={<TrianglesLeaf />} />
-            <Route path="/grid" element={<TrianglesGrid />} />
-            <Route path="/gameoflife" element={<GameOfLife />} />
+            <Route element={<TrianglesLeaf />} path="/" />
+
+            <Route element={<TrianglesGrid />} path="/grid" />
+
+            <Route element={<GameOfLife />} path="/gameoflife" />
         </Routes>
     </>
 )

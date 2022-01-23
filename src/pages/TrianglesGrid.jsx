@@ -17,8 +17,8 @@ const TrianglesGrid = () => {
         const triangleSide = Math.cos(Math.PI / 6) * length * 2
         const triangleHeight = Math.sin(Math.PI / 6) * length
 
-        setGrid(grid =>
-            produce(grid, gridCopy => {
+        setGrid((grid) =>
+            produce(grid, (gridCopy) => {
                 let rowCounter = 0 // rows 0-1 => 0, 2-3 => 1, etc..
                 for (let jj = 0; jj < gridHeight; jj++) {
                     const yOffset = triangleHeight * (jj + 1) + 10 + rowCounter * triangleHeight
@@ -40,14 +40,14 @@ const TrianglesGrid = () => {
     }, [])
 
     const draw = useCallback(
-        p5 => {
+        (p5) => {
             const { mouseX, mouseY } = p5
             p5.background(0)
             p5.noFill()
             p5.ellipse(mouseX, mouseY, 20, 20)
             p5.stroke(0, 255, 0)
             grid.forEach(([xOffset, yOffset, angle]) =>
-                nestTriangles(length, angle, depth).forEach(triangle =>
+                nestTriangles(length, angle, depth).forEach((triangle) =>
                     p5.triangle(...triangleOnOffset(xOffset, yOffset, triangle))
                 )
             )
@@ -65,9 +65,8 @@ const TrianglesGrid = () => {
 
     return (
         <>
-            <Sketch draw={draw} setup={setup} />
-
             <label htmlFor="length-slider">Size ({length})</label>
+
             <input
                 className="slider"
                 id="length-slider"
@@ -79,6 +78,7 @@ const TrianglesGrid = () => {
             />
 
             <label htmlFor="angle-slider">Angle ({angle})</label>
+
             <input
                 className="slider"
                 id="angle-slider"
@@ -90,6 +90,7 @@ const TrianglesGrid = () => {
             />
 
             <label htmlFor="depth-slider">Depth ({depth})</label>
+
             <input
                 className="slider"
                 id="depth-slider"
@@ -101,6 +102,7 @@ const TrianglesGrid = () => {
             />
 
             <label htmlFor="step-slider">Step ({step})</label>
+
             <input
                 className="slider"
                 id="step-slider"
@@ -110,6 +112,8 @@ const TrianglesGrid = () => {
                 type="range"
                 value={step}
             />
+
+            <Sketch draw={draw} setup={setup} />
         </>
     )
 }
