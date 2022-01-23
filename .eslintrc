@@ -26,11 +26,13 @@
         "ecmaFeatures": {
             "jsx": true,
             "modules": true
-        }
+        },
+        "requireConfigFile": false
     },
     "rules": {
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
+        "react/function-component-definition": "arrow-function",
         "prettier/prettier": "error",
         "react/jsx-max-props-per-line": [1, { "maximum": 10, "when": "multiline" }],
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
@@ -42,7 +44,7 @@
     },
     "extends": ["plugin:prettier/recommended", "plugin:react/all"],
     "plugins": ["react", "react-hooks", "prettier"],
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "env": {
         "browser": true,
         "node": true
